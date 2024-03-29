@@ -19,7 +19,8 @@ def hello():
 def get_tasks():
     res = {"tasks" : list(tasks.values())}
     return json.dumps(res), 200
-@app.route("/tasks/", method = ["POST"])
+
+@app.route("/tasks/", methods = ["POST"])
 def create_task():
     global task_id_counter
     body = json.loads(request.data)
@@ -32,6 +33,33 @@ def create_task():
     tasks[task_id_counter] = task
     task_id_counter += 1
     return json.dumps(task), 201
+
+@app.route("/tasks/<int:task_id>/")
+def get_task(task_id):
+    task = tasks.get(task_id)
+    if not task:
+        return json.dumps({"error": "Task not found"}), 404
+    return json.dumps(task), 200
+
+
+@app.route("/tasks/<int:task_id>/", methods = ["POST"])
+def update_task(task_id):
+    task = tasks.get(task_id)
+    if not task:
+        return json.dumps({"error": "Task not found"}), 404
+    body = json.loads(request.data)
+    tasks["description"] = body.description
+    tasks["done"] = body.done
+    return json.dumps(task), 200
+
+@app.route("/tasks/<int:task_id>/", methods = ["DELETE"])
+def delete_task(task_id):
+    task = tasks.get(task_id)
+    if not task:
+        return json.dumps({"error": "Task not found"}), 404
+    del tasks[task_id]
+    return json.dumps(task), 200
+
 
 
 if __name__ == "__main__":
