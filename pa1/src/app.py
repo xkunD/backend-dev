@@ -36,12 +36,18 @@ def hello_world():
 
 @app.route("/api/posts/")
 def get_posts():
+    '''
+    Returns all posts
+    '''
     res = {"posts" : list(posts.values())}
     return json.dumps(res), 200
 
 
 @app.route("/api/posts/", methods = ["POST"])
 def create_post():
+    '''
+    Creating a new post
+    '''
     global post_id_counter
     body = json.loads(request.data)
     description = body.get("description")
@@ -56,6 +62,9 @@ def create_post():
 
 @app.route("/api/posts/<int:post_id>/")
 def get_post(post_id):
+    '''
+    get a post by its ID
+    '''
     post = posts.get(post_id)
     if not post:
         return json.dumps({"error": "Post not found"}), 404
@@ -63,6 +72,9 @@ def get_post(post_id):
 
 @app.route("/api/posts/<int:post_id>/", methods = ["DELETE"])
 def delete_post(post_id):
+    '''
+    delete a post by its ID
+    '''
     post = posts.get(post_id)
     if not post:
         return json.dumps({"error": "Post not found"}), 404
@@ -71,11 +83,17 @@ def delete_post(post_id):
 
 @app.route("/api/posts/<int:post_id>/comments/")
 def get_comments(post_id):
+    '''
+    Returns all comments for a post by the ID
+    '''
     post_comments = comments.get(post_id)
     return json.dumps({"comments": post_comments}), 200
 
 @app.route("/api/posts/<int:post_id>/comments/", methods=["POST"])
 def create_comment(post_id):
+    '''
+    Create a comment for a post with its ID
+    '''
     global comment_id_counter
     body = request.json
     comment = {"id": comment_id_counter, "upvotes": 1, **body}
@@ -88,6 +106,9 @@ def create_comment(post_id):
 
 @app.route("/api/posts/<int:post_id>/comments/<int:comment_id>/", methods=["POST"])
 def edit_comment(post_id, comment_id):
+    '''
+    Edit a specific comment for a specific post by IDs
+    '''
     body = request.json
     for comment in comments.get(post_id, []):
         if comment['id'] == comment_id:
