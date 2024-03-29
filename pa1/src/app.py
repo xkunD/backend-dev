@@ -6,6 +6,8 @@ from flask import request
  
 app = Flask(__name__)
 
+task_id_counter = 2
+
 
 @app.route("/")
 def hello_world():
