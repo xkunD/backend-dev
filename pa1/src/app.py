@@ -22,7 +22,12 @@ posts = {
         "username": "alicia98"},
 }
 
-comments = {}
+comments = {
+    0: [
+        {"id": 0, "upvotes": 8, "text": "Wow, my first Reddit gold!", "username": "alicia98"},
+        {"id": 1, "upvotes": 1, "text": "I want one!", "username": "dogperson"},
+    ],
+}
 
 @app.route("/")
 def hello_world():
@@ -66,11 +71,11 @@ def delete_post(post_id):
 
 @app.route("/api/posts/<int:post_id>/comments/")
 def get_comments(post_id):
-    post_comments = comments.get(post_id, [])
+    post_comments = comments.get(post_id)
     return json.dumps({"comments": post_comments}), 200
 
 @app.route("/api/posts/<int:post_id>/comments/", methods=["POST"])
-def post_comment(post_id):
+def create_comment(post_id):
     global comment_id_counter
     body = request.json
     comment = {"id": comment_id_counter, "upvotes": 1, **body}
@@ -79,7 +84,7 @@ def post_comment(post_id):
     else:
         comments[post_id] = [comment]
     comment_id_counter += 1
-    return jsonify(comment), 201
+    return json.dumps(comment), 201
 
 @app.route("/api/posts/<int:post_id>/comments/<int:comment_id>/", methods=["POST"])
 def edit_comment(post_id, comment_id):
@@ -87,13 +92,8 @@ def edit_comment(post_id, comment_id):
     for comment in comments.get(post_id, []):
         if comment['id'] == comment_id:
             comment['text'] = body.get('text', comment['text'])
-            return jsonify(comment), 200
-    return jsonify({"error": "Comment not found"}), 404
-
-
-
-
-
+            return json.dumps(comment), 200
+    return json.dumps({"error": "Comment not found"}), 404
 
 
 if __name__ == "__main__":
