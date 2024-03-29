@@ -3,5 +3,5 @@ NetID: xd239
 
 Challenges Attempted: ()
 
-Difficulties:
-Comments:
+Difficulties: ok
+Comments: none
