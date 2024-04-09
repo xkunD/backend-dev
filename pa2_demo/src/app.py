@@ -6,7 +6,7 @@ notes:
     . venv/bin/activate
     pip3 install -r requirements.txt
     python3 app.py
-    
+     
 '''
 
 import json
@@ -24,7 +24,7 @@ def get_tasks():
     """
     Endpoint for getting all tasks
     """
-    return json.dumpts({"tasks": DB.get_all_tasks()}),200
+    return json.dumps({"tasks": DB.get_all_tasks()}), 200
 
 
 @app.route("/tasks/", methods=["POST"])
