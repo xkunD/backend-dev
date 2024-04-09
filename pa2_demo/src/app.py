@@ -1,3 +1,11 @@
+'''
+notes:
+
+python3 -m venv venv
+. venv/bin/activate
+
+'''
+
 import json
 from flask import Flask, request
 import db
@@ -10,7 +18,10 @@ DB = db.DatabaseDriver()
 @app.route("/")
 @app.route("/tasks/")
 def get_tasks():
-    
+    """
+    Endpoint for getting all tasks
+    """
+    return json.dumpts({"tasks": DB.get_all_tasks()}),200
 
 
 @app.route("/tasks/", methods=["POST"])
