@@ -1,9 +1,12 @@
 '''
 notes:
 
-python3 -m venv venv
-. venv/bin/activate
-
+    (terminal go to 'src')
+    python3 -m venv venv
+    . venv/bin/activate
+    pip3 install -r requirements.txt
+    python3 app.py
+    
 '''
 
 import json
