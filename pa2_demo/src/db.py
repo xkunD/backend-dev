@@ -41,7 +41,18 @@ class DatabaseDriver(object):
         Using SQL, delete a task table
         """
         self.conn.execute("""
+        DROP TABLE IF EXISTS task;
 """)
+
+def get_all_tasks(self):
+    """
+    Using SQL, return all the tasks in a table
+    """
+    cursor = self.conn.execute("SELECT * FROM task;")
+    tasks = []
+    for row in cursor:
+        tasks.append({"id": row[0], "description": row[1], "done": row[2]})
+    return tasks
 
 
 # Only <=1 instance of the database driver
