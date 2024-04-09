@@ -1,14 +1,16 @@
 import json
 from flask import Flask, request
+import db
 
 app = Flask(__name__)
 
+DB = db.DatabaseDriver()
 
 
 @app.route("/")
 @app.route("/tasks/")
 def get_tasks():
-    pass
+    
 
 
 @app.route("/tasks/", methods=["POST"])
