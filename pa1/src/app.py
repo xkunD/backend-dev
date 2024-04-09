@@ -7,7 +7,7 @@ from flask import request
 app = Flask(__name__)
 
 post_id_counter = 2
-comment_id_counter = 0
+comment_id_counter = 2
 
 posts = {
     0: {"id": 0,
@@ -24,6 +24,10 @@ posts = {
 
 comments = {
     0: [
+        {"id": 0, "upvotes": 8, "text": "Wow, my first Reddit gold!", "username": "alicia98"},
+        {"id": 1, "upvotes": 1, "text": "I want one!", "username": "dogperson"},
+    ],
+    1: [
         {"id": 0, "upvotes": 8, "text": "Wow, my first Reddit gold!", "username": "alicia98"},
         {"id": 1, "upvotes": 1, "text": "I want one!", "username": "dogperson"},
     ],
@@ -50,11 +54,15 @@ def create_post():
     '''
     global post_id_counter
     body = json.loads(request.data)
-    description = body.get("description")
+    text = body.get("title")
+    link = body.get("link")
+    username = body.get("username")
     post = {
         "id": post_id_counter,
-        "description": description,
-        "done": False
+        "upvotes": 1,
+        "text": text,
+        "link": link,
+        "username": username
     }
     posts[post_id_counter] = post
     post_id_counter += 1
