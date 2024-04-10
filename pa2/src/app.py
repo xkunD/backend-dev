@@ -55,10 +55,14 @@ def delete_user(user_id):
     return json.dumps(user), 202
 
 @app.route("/api/send/", methods=["POST"])
-def send_money(sender_id, receiver_id, amount):
+def send_money():
     """
     Send money from one user to another
     """
+    body = json.loads(request.data)
+    sender_id = body.get("sender_id")
+    receiver_id = body.get("receiver_id")
+    amount = body.get("amount")
     if sender_id is None or receiver_id is None or amount is None:
         return json.dumps({"error": "Invalid Input"}), 400
     sender_balance = DB.get_balance_by_id(sender_id)
