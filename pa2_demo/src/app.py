@@ -65,7 +65,11 @@ def update_task(task_id):
 
 @app.route("/tasks/<int:task_id>/", methods=["DELETE"])
 def delete_task(task_id):
-    pass
+    task = DB.get_task_by_id(task_id)
+    if task is None:
+        return json.dumps({"error": "Task not found"})
+    DB.delete_task_by_id(task_id)
+    return json.dumps(task), 202
 
 
 if __name__ == "__main__":

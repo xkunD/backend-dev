@@ -82,6 +82,16 @@ class DatabaseDriver(object):
                           done = ?
                           WHERE id = ?""", (description, done, id))
         self.conn.commit()
+
+    def delete_task_by_id(self, id):
+        '''
+        Using SQL, delete a task in our table
+        '''
+        self.conn.execute("""
+                          DELETE FROM task WHERE id=?""", (id,))
+
+
+
 # Only <=1 instance of the database driver
 # exists within the app at all times
 DatabaseDriver = singleton(DatabaseDriver)
