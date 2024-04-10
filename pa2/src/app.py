@@ -21,7 +21,19 @@ def get_users():
 @app.route("/api/users/")
 def create_user():
     """
+    Endpoint for creating a user
     """
+    body = json.loads(request.data)
+    name = body.get("name")
+    username = body.get("username")
+    user_id = DB.insert_user_table(name, username)
+    user = DB.get_user_by_id(user_id)
+    if user is None:
+        return json.dumps({"error": "Task not Found"}), 400
+    return json.dumps(user), 201
+
+
+
 
 
 
