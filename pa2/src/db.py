@@ -54,7 +54,15 @@ class DatabaseDriver(object):
                                    INSERT INTO user(name, username) VALUES (?, ?);""", (name, username))
         self.conn.commit()
         return cursor.lastrowid
-        
+    
+    def get_user_by_id(self, user_id):
+        """
+        Using SQL, get a user by his ID
+        """
+        cursor = self.conn.execute("SELECT * FROM user WHERE id = ?;", (user_id,))
+        for row in cursor:
+            return ({"id": row[0], "name": row[1], "username": row[2]})
+        return None        
 
 
 
