@@ -20,7 +20,32 @@ class DatabaseDriver(object):
     """
 
     def __init__(self):
-        pass
+        """
+        Secures a connection with the database and stores it into the instance variable conn.
+        """
+        self.conn = sqlite3.connect("user.db", check_same_thread=False)
+        self.create_user_table()
+
+    def create_user_table(self):
+        '''
+        Using SQL, creates a user table
+        '''
+        self.conn.execute("""
+        CREATE TABLE IF NOT EXISTS user(
+                          id INTEGER PRIMARY KEY AUTOINCREMENT,
+                          name TEXT NOT NULL,
+                          username TEXT NOT NULL
+        );""")
+
+    def get_all_tasks(self):
+        """
+        Using SQL, return all the tasks in a table
+        """
+        cursor = self.conn.execute("SELECT * FROM task;")
+        tasks = []
+        for row in cursor:
+            tasks.append({"id": row[0], "description": row[1], "done": row[2]})
+        return tasks
 
 
 # Only <=1 instance of the database driver
