@@ -70,8 +70,17 @@ class DatabaseDriver(object):
         Using SQL, delete a user by his ID
         """
         self.conn.execute("""
-                          DELETE FROM task WHERE id=?""", (id,))
+                          DELETE FROM user WHERE id=?""", (id,))
 
+    def get_balance_by_id(self, user_id):
+        """
+        Using SQL, get a user's balance by his iD
+        """
+        cursor = self.conn.execute("SELECT * FROM user WHERE id = ?;", (user_id,))
+        for row in cursor:
+            return row[3]
+        return None       
+        
 
 
 
