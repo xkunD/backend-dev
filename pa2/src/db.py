@@ -34,18 +34,17 @@ class DatabaseDriver(object):
         CREATE TABLE IF NOT EXISTS user(
                           id INTEGER PRIMARY KEY AUTOINCREMENT,
                           name TEXT NOT NULL,
-                          username TEXT NOT NULL
-        );""")
+                          username TEXT NOT NULL);""")
 
-    def get_all_tasks(self):
+    def get_all_users(self):
         """
-        Using SQL, return all the tasks in a table
+        Using SQL, return all the users in a table
         """
-        cursor = self.conn.execute("SELECT * FROM task;")
-        tasks = []
+        cursor = self.conn.execute("SELECT * FROM user;")
+        users = []
         for row in cursor:
-            tasks.append({"id": row[0], "description": row[1], "done": row[2]})
-        return tasks
+            users.append({"id": row[0], "user": row[1], "username": row[2]})
+        return users
 
 
 # Only <=1 instance of the database driver

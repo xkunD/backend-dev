@@ -11,6 +11,13 @@ app = Flask(__name__)
 def hello_world():
     return "Hello world!"
 
+@app.route("/api/users/")
+def get_users():
+    """
+    Endpoint for getting all users
+    """
+    return json.dumps({"tasks": DB.get_all_users()}),200
+
 
 # your routes here
 
