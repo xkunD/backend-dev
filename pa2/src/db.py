@@ -37,6 +37,14 @@ class DatabaseDriver(object):
                           username TEXT NOT NULL,
                           balance INTEGER NOT NULL);""")
 
+    def delete_user_table(self):
+        """
+        Using SQL, delete a user table
+        """
+        self.conn.execute("""
+        DROP TABLE IF EXISTS user;
+    """)
+        
     def get_all_users(self):
         """
         Using SQL, return all the users in a table
