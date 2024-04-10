@@ -55,7 +55,24 @@ class DatabaseDriver(object):
             tasks.append({"id": row[0], "description": row[1], "done": row[2]})
         return tasks
 
-
+    def insert_task_table(self, description, done):
+        '''
+        Using SQL, inserts a task into a task table
+        '''
+        cursor = self.conn.execute("""
+        INSERT INTO task(description, done) VALUES (?, ?);""", (description, done))
+        self.conn.commit()
+        return cursor.lastrowid
+    
+    def get_task_by_id(self, task_id):
+        """
+        Using SQL, get a task by its ID
+        """
+        cursor = self.conn.execute("SELECT * FROM task WHERE id = ?;", (task_id,))
+        for row in cursor:
+            return ({"id": row[0], "description": row[1], "done": row[2]})
+        return None
+    
 # Only <=1 instance of the database driver
 # exists within the app at all times
 DatabaseDriver = singleton(DatabaseDriver)

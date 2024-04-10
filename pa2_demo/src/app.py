@@ -29,7 +29,14 @@ def get_tasks():
 
 @app.route("/tasks/", methods=["POST"])
 def create_task():
-    pass
+    body = json.loads(request.data)
+    description = body.get("description")
+    done = body.get("done")
+    task_id = DB.insert_task_table(description, done)
+    task = DB.get_task_by_id(task_id)
+    if task is None:
+        return json.dumps({"error": "Task not found"}), 400
+    return json.dumps(task), 201
 
 
 @app.route("/tasks/<int:task_id>/")
