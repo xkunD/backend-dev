@@ -55,13 +55,25 @@ def delete_user(user_id):
     return json.dumps(user), 202
 
 @app.route("/api/send/", methods=["POST"])
-def send_money(self, sender_id, receiver_id, amount):
+def send_money(sender_id, receiver_id, amount):
     """
     Send money from one user to another
     """
     if sender_id is None or receiver_id is None or amount is None:
         return json.dumps({"error": "Invalid Input"}), 400
-
+    sender_balance = DB.get_balance_by_id(sender_id)
+    receiver_balance = DB.get_balance_by_id(receiver_id)
+    if sender_balance is None or receiver_balance is None:
+        return json.dumps({"error": "User not found"}), 400
+    if sender_balance < amount:
+        return json.dumps({"error": "User balance overdraft"}), 400
+    sender_balance -= amount
+    receiver_balance += amount
+    DB.update_balance_by_id(sender_balance, sender_id)
+    DB.update_balance_by_id(receiver_balance, receiver_id)
+    return json.dumps({"sender_id": sender_id,
+    "receiver_id": receiver_id,
+    "amount": amount}), 200
 
 
 

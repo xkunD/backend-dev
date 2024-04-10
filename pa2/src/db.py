@@ -79,7 +79,15 @@ class DatabaseDriver(object):
         cursor = self.conn.execute("SELECT * FROM user WHERE id = ?;", (user_id,))
         for row in cursor:
             return row[3]
-        return None       
+        return None 
+
+    def update_balance_by_id(self, balance, id):
+        """
+        Using SQL, update the balance of a user
+        """
+        self.conn.execute("""
+                          UPDATE user SET balance = ? WHERE id = ?""", (balance, id))
+        self.conn.commit()     
         
 
 
