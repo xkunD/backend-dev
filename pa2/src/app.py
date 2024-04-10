@@ -16,7 +16,7 @@ def get_users():
     """
     Endpoint for getting all users
     """
-    return json.dumps({"tasks": DB.get_all_users()}),200
+    return json.dumps({"users": DB.get_all_users()}),200
 
 @app.route("/api/users/", methods=["POST"])
 def create_user():

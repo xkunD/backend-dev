@@ -15,7 +15,7 @@ def singleton(cls):
 
 class DatabaseDriver(object):
     """
-    Database driver for the Task app.
+    Database driver for the app.
     Handles with reading and writing data with the database.
     """
 
