@@ -45,6 +45,17 @@ class DatabaseDriver(object):
         for row in cursor:
             users.append({"id": row[0], "user": row[1], "username": row[2]})
         return users
+    
+    def insert_user_table(self, name, username):
+        '''
+        Using SQL, inserts a user into a user table
+        '''
+        cursor = self.conn.execute("""
+                                   INSERT INTO user(name, username) VALUES (?, ?);""", (name, username))
+        self.conn.commit()
+        return cursor.lastrowid
+        
+
 
 
 # Only <=1 instance of the database driver

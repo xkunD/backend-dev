@@ -18,8 +18,14 @@ def get_users():
     """
     return json.dumps({"tasks": DB.get_all_users()}),200
 
+@app.route("/api/users/")
+def create_user():
+    """
+    """
 
-# your routes here
+
+
+
 
 
 if __name__ == "__main__":
