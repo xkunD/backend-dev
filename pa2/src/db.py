@@ -47,12 +47,12 @@ class DatabaseDriver(object):
             users.append({"id": row[0], "user": row[1], "username": row[2]})
         return users
     
-    def insert_user_table(self, name, username):
+    def insert_user_table(self, name, username, balance):
         '''
         Using SQL, inserts a user into a user table
         '''
         cursor = self.conn.execute("""
-                                   INSERT INTO user(name, username) VALUES (?, ?);""", (name, username))
+                                   INSERT INTO user(name, username, balance) VALUES (?, ?, ?);""", (name, username, balance))
         self.conn.commit()
         return cursor.lastrowid
     
@@ -62,7 +62,7 @@ class DatabaseDriver(object):
         """
         cursor = self.conn.execute("SELECT * FROM user WHERE id = ?;", (user_id,))
         for row in cursor:
-            return ({"id": row[0], "name": row[1], "username": row[2]})
+            return ({"id": row[0], "name": row[1], "username": row[2], "balance": row[3]})
         return None        
 
 
