@@ -34,7 +34,8 @@ class DatabaseDriver(object):
         CREATE TABLE IF NOT EXISTS user(
                           id INTEGER PRIMARY KEY AUTOINCREMENT,
                           name TEXT NOT NULL,
-                          username TEXT NOT NULL);""")
+                          username TEXT NOT NULL,
+                          balance INTEGER NOT NULL);""")
 
     def get_all_users(self):
         """
