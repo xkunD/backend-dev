@@ -44,7 +44,7 @@ class DatabaseDriver(object):
         cursor = self.conn.execute("SELECT * FROM user;")
         users = []
         for row in cursor:
-            users.append({"id": row[0], "user": row[1], "username": row[2]})
+            users.append({"id": row[0], "name": row[1], "username": row[2]})
         return users
     
     def insert_user_table(self, name, username, balance):

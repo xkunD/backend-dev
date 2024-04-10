@@ -30,12 +30,18 @@ def create_user():
     user_id = DB.insert_user_table(name, username, balance)
     user = DB.get_user_by_id(user_id)
     if user is None:
-        return json.dumps({"error": "Task not found"}), 400
+        return json.dumps({"error": "User not found"}), 400
     return json.dumps(user), 201
 
-
-
-
+@app.route("/api/user/<int:user_id>/")
+def get_user(user_id):
+    """
+    Endpoint for getting a user by its ID
+    """
+    user = DB.get_user_by_id(user_id)
+    if user is None:
+        return json.dumps({"error": "User not found"}), 400
+    return json.dumps(user), 200
 
 
 
