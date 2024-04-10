@@ -41,7 +41,10 @@ def create_task():
 
 @app.route("/tasks/<int:task_id>/")
 def get_task(task_id):
-    pass
+    task = DB.get_task_by_id(task_id)
+    if task is None:
+        return json.dumps({"error": "Task not found"}), 400
+    return json.dumps(task), 200
 
 
 @app.route("/tasks/<int:task_id>/", methods=["POST"])
