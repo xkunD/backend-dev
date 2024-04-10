@@ -65,6 +65,14 @@ class DatabaseDriver(object):
             return ({"id": row[0], "name": row[1], "username": row[2], "balance": row[3]})
         return None        
 
+    def delete_user_by_id(self, id):
+        """
+        Using SQL, delete a user by his ID
+        """
+        self.conn.execute("""
+                          DELETE FROM task WHERE id=?""", (id,))
+
+
 
 
 # Only <=1 instance of the database driver

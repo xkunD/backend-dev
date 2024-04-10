@@ -43,6 +43,17 @@ def get_user(user_id):
         return json.dumps({"error": "User not found"}), 400
     return json.dumps(user), 200
 
+@app.route("/api/user/<int:user_id>/", methods=["DELETE"])
+def delete_user(user_id):
+    """
+    Endpoint for deleting a user by his ID
+    """
+    user = DB.get_user_by_id(user_id)
+    if user is None:
+        return json.dumps({"error": "User not found"}), 400
+    DB.delete_user_by_id(user_id)
+    return json.dumps(user), 202
+
 
 
 
