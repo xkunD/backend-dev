@@ -49,7 +49,18 @@ def get_task(task_id):
 
 @app.route("/tasks/<int:task_id>/", methods=["POST"])
 def update_task(task_id):
-    pass
+    """
+    Endpoint for updating a task
+    """
+    body = json.loads(request.data)
+    description = body.get("description")
+    done = body.get("done")
+    task = DB.get_task_by_id(task_id)
+    if task is None:
+        return json.dumps({"error": "Task not found"})
+    DB.update_task_by_id(description, done, task_id)
+    task = DB.get_task_by_id(task_id)
+    return json.dumps(task), 200 
 
 
 @app.route("/tasks/<int:task_id>/", methods=["DELETE"])

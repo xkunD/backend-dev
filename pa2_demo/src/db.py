@@ -73,6 +73,15 @@ class DatabaseDriver(object):
             return ({"id": row[0], "description": row[1], "done": row[2]})
         return None
     
+    def update_task_by_id(self, description, done, id):
+        """
+        Using SQL, updates a task in our table
+        """
+        self.conn.execute("""
+        UPDATE task SET description = ?,
+                          done = ?
+                          WHERE id = ?""", (description, done, id))
+        self.conn.commit()
 # Only <=1 instance of the database driver
 # exists within the app at all times
 DatabaseDriver = singleton(DatabaseDriver)
