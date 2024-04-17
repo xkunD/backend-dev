@@ -89,6 +89,15 @@ class DatabaseDriver(object):
         cursor = self.conn.execute("INSERT INTO tasks (description, done) VALUES (?, ?);", (description, done))
         self.conn.commit()
         return cursor.lastrowid
+    
+    def insert_subtask(self, description, done, task_id):
+        """
+        Using sql adds a new subtask into the subtask table
+        """
+        cursor = self.conn.execute("""
+                                   INSERT INTO subtasks (description, done, task_id) VALUES (?,?,?);""", (description, done, task_id))
+        self.conn.commit()
+        return cursor.lastrowid
 
     def get_task_by_id(self, id):
         """
@@ -98,6 +107,23 @@ class DatabaseDriver(object):
         for row in cursor:
             return {"id": row[0], "description": row[1], "done": bool(row[2])}
         return None
+    
+    def get_subtask_by_id(self, id):
+        """
+        Using SQL, gets a subtask by id
+        """
+        cursor = self.conn.execute("""
+                                   SELECT * FROM subtasks WHERE id=?;""", (id,),
+                                   )
+        for row in cursor:
+            return {
+                "id ": id,
+                "description": row[1],
+                "done": row[2],
+                "task_id": row[3]
+            }
+        return None
+    
 
     def update_task_by_id(self, id, description, done):
         """
