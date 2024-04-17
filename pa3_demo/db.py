@@ -25,6 +25,7 @@ class DatabaseDriver(object):
         """
         self.conn = sqlite3.connect("todo.db", check_same_thread=False)
         self.create_task_table()
+        self.create_subtask_table()
 
     # -- TASKS -----------------------------------------------------------
 
@@ -52,10 +53,12 @@ class DatabaseDriver(object):
         try:
             self.conn.execute(
                 """
-                CREATE TABLE tasks (
+                CREATE TABLE IF NOT EXISTS subtask (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     description TEXT NOT NULL,
-                    done INTEGER NOT NULL
+                    done INTEGER NOT NULL,
+                    task_id INTEGER NOT NULL,
+                    FOREIGN KEY (task_id) REFERENCES tasks(id)
                 );
             """
             )
