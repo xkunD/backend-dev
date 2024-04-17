@@ -71,5 +71,20 @@ def delete_task(task_id):
     DB.delete_task_by_id(task_id)
     return success_response(task)
 
+@app.route("/tasks/<int:task_id>/subtasks/", methods = ["POST"])
+def create_subtask(task_id):
+    """
+    Endpoint for creating a subtask for task with id task_id
+    """
+    body = json.loads(request.data)
+    description =body.get("description")
+    
+    task = DB.get_task_by_id(task_id)
+    if task is None:
+        return failure_response("Task not found")
+    
+    subtask_id = DB.insert_subtask(description, False, task_id)
+    subtask = DB.get_subtask_by_id(subtask_id)
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
