@@ -44,6 +44,23 @@ class DatabaseDriver(object):
             )
         except Exception as e:
             print(e)
+    
+    def create_subtask_table(self):
+        """
+        Using SQL we create a subtask table
+        """
+        try:
+            self.conn.execute(
+                """
+                CREATE TABLE tasks (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    description TEXT NOT NULL,
+                    done INTEGER NOT NULL
+                );
+            """
+            )
+        except Exception as e:
+            print(e)
 
     def delete_task_table(self):
         """
