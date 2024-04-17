@@ -123,7 +123,6 @@ class DatabaseDriver(object):
                 "task_id": row[3]
             }
         return None
-    
 
     def update_task_by_id(self, id, description, done):
         """
