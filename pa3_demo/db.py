@@ -151,6 +151,18 @@ class DatabaseDriver(object):
         )
         self.conn.commit()
 
+    def get_subtask_of_task(self, task_id):
+        """
+        Using SQL, gets all subtasks given task_id
+        """
+        cursor = self.conn.execute("""
+                                   SELECT * FROM subtasks WHERE id=?""",
+                                   (id,),
+                                   )
+        
+
+
+
 #-- SUBTASKS --------------------------------------------------------
 
 
