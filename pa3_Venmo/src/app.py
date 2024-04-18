@@ -34,7 +34,7 @@ def create_user():
     user["transactions"] = DB.get_transactions_of_user(user_id)
     return json.dumps(user), 201
 
-@app.route("/api/user/<int:user_id>/")
+@app.route("/api/users/<int:user_id>/")
 def get_user(user_id):
     """
     Endpoint for getting a user by its ID
@@ -50,7 +50,7 @@ def get_user(user_id):
 
 
 
-@app.route("/api/user/<int:user_id>/", methods=["DELETE"])
+@app.route("/api/users/<int:user_id>/", methods=["DELETE"])
 def delete_user(user_id):
     """
     Endpoint for deleting a user by his ID
@@ -86,23 +86,23 @@ def send_or_request_money():
     if accepted is None:
         transaction_id = DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
         transaction = DB.get_transaction_by_id(transaction_id)
-        return json.dumps(transaction),200
+        return json.dumps(transaction),201
     
     if accepted is True:
         sender_balance = DB.get_balance_by_id(sender_id)
         receiver_balance = DB.get_balance_by_id(receiver_id)
         if sender_balance < amount:
-            return json.dumps({"error": "User balance overdraft"}), 400
+            return json.dumps({"error": "User balance overdraft"}), 403
         sender_balance -= amount
         receiver_balance += amount
         DB.update_balance_by_id(sender_balance, sender_id)
         DB.update_balance_by_id(receiver_balance, receiver_id)
         transaction_id = DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
         transaction = DB.get_transaction_by_id(transaction_id)
-        return json.dumps(transaction), 200
+        return json.dumps(transaction), 201
 
 
-@app.route("/api/transactions/<int:tran_id>/", method=["POST"])
+@app.route("/api/transactions/<int:tran_id>/", methods=["POST"])
 def accept_or_deny_money(tran_id):
     """
     Endpoint for user to accept or deny the money transaction
@@ -117,8 +117,8 @@ def accept_or_deny_money(tran_id):
     sender_id = transaction["sender_id"]
     receiver_id = transaction["receiver_id"]
     curr_status = transaction["accepted"]
-    sender_balance = transaction["sender_balance"]
-    receiver_balance = transaction["receiver_balance"]
+    sender_balance = DB.get_balance_by_id(sender_id)
+    receiver_balance = DB.get_balance_by_id(receiver_id)
     amount = transaction["amount"]
 
 
@@ -130,13 +130,13 @@ def accept_or_deny_money(tran_id):
 
     if accepted is True:
         if sender_balance < amount:
-            return json.dumps({"error": "User balance overdraft"}), 400
+            return json.dumps({"error": "User balance overdraft"}), 403
         sender_balance -= amount
         receiver_balance += amount
         DB.update_balance_by_id(sender_balance, sender_id)
         DB.update_balance_by_id(receiver_balance, receiver_id)
         DB.update_transaction_accepted_value(tran_id, accepted)
-        
+
     transaction = DB.get_transaction_by_id(tran_id)
     return json.dumps(transaction), 200
 
