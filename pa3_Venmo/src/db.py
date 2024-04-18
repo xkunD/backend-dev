@@ -120,7 +120,7 @@ class DatabaseDriver(object):
                 "message": row[5],
                 "accepted": row[6]
             }) 
-        return None 
+        return None
           
         
     

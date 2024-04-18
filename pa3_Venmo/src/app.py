@@ -53,16 +53,7 @@ def get_all_transactions():
     """
     return json.dumps(DB.get_all_transactions()), 200
 
-@app.route("/api/transactions/", methods = ["POST"])
-def insert_transaction():
-    body = json.loads(request.data)
-    sender_id = body.get("sender_id")
-    receiver_id = body.get("receiver_id")
-    amount = body.get("amount")
-    message = body.get("message")
-    accepted = body.get("accepted")
-    transaction = DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
-    return json.dumps(transaction), 200
+
 
 @app.route("/api/user/<int:user_id>/", methods=["DELETE"])
 def delete_user(user_id):
