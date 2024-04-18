@@ -71,16 +71,16 @@ class DatabaseDriver(object):
         """
         self.conn.execute("DROP TABLE IF EXISTS tasks;")
 
-    def get_all_tasks(self):
-        """
-        Using SQL, gets all tasks in the task table
-        """
-        cursor = self.conn.execute("SELECT * FROM tasks;")
-        tasks = []
+    # def get_all_tasks(self):
+    #     """
+    #     Using SQL, gets all tasks in the task table
+    #     """
+    #     cursor = self.conn.execute("SELECT * FROM tasks;")
+    #     tasks = []
 
-        for row in cursor:
-            tasks.append({"id": row[0], "description": row[1], "done": bool(row[2])})
-        return tasks
+    #     for row in cursor:
+    #         tasks.append({"id": row[0], "description": row[1], "done": bool(row[2])})
+    #     return tasks
 
     def insert_task_table(self, description, done):
         """
@@ -183,8 +183,10 @@ class DatabaseDriver(object):
                 "id": row[0],
                 "description": row[1],
                 "done": bool(row[2]),
-                "subtasks": self.get_subtasks_of_task(row[0])
+                "subtasks": self.get_subtask_of_task(row[0])
             })
+
+        return tasks
 
 
 #-- SUBTASKS --------------------------------------------------------
