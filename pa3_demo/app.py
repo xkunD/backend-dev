@@ -90,5 +90,17 @@ def create_subtask(task_id):
         return failure_response("Could not create subtask", 400)
     return success_response(subtask, 201)
 
+
+@app.route("/tasks/<int:task_id>/subtasks")
+def get_subtasks_of_task(task_id):
+    """
+    Endpoint for getting all subtasks for task with id task_id
+    """
+    task = DB.get_task_by_id(task_id)
+    if task is None:
+        return failure_response("Task not found")
+    return success_response({"subtasks": DB.get_subtask_of_task(task_id)})
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
