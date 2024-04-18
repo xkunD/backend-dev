@@ -53,7 +53,7 @@ class DatabaseDriver(object):
         try:
             self.conn.execute(
                 """
-                CREATE TABLE IF NOT EXISTS subtask (
+                CREATE TABLE IF NOT EXISTS subtasks (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     description TEXT NOT NULL,
                     done INTEGER NOT NULL,

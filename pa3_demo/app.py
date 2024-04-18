@@ -86,5 +86,9 @@ def create_subtask(task_id):
     subtask_id = DB.insert_subtask(description, False, task_id)
     subtask = DB.get_subtask_by_id(subtask_id)
 
+    if subtask is None:
+        return failure_response("Could not create subtask", 400)
+    return success_response(subtask, 201)
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8000, debug=True)
