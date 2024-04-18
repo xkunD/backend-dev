@@ -48,12 +48,12 @@ class DatabaseDriver(object):
                           id INTEGER PRIMARY KEY AUTOINCREMENT,
                           timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                           sender_id INTEGER NOT NULL,
-                          reciever_id INTEGER NOT NULL,
+                          receiver_id INTEGER NOT NULL,
                           amount INTEGER NOT NULL,
                           message TEXT NOT NULL,
                           accepted BOOLEAN,
                           FOREIGN KEY (sender_id) REFERENCES user(id),
-                          FOREIGN KEY (reciever_id) REFERENCES user(id));""")
+                          FOREIGN KEY (receiver_id) REFERENCES user(id));""")
         
     def delete_user_table(self):
         """
@@ -81,6 +81,18 @@ class DatabaseDriver(object):
                                    INSERT INTO user(name, username, balance) VALUES (?, ?, ?);""", (name, username, balance))
         self.conn.commit()
         return cursor.lastrowid
+    
+
+    def insert_transactions(self, sender_id, receiver, amount, message, accepted):
+        """
+        Using SQL, inserts a trasaction 
+        """
+        cursor = self.conn.execute("""
+                                   INSERT INTO transactions(sender_id, receiver, amount, message, accepted) VALUES (?,?,?,?,?);
+                                """, (sender_id, receiver, amount, message, accepted))
+        self.conn.commit()
+        return cursor.lastrowid
+        
     
     def get_user_by_id(self, user_id):
         """

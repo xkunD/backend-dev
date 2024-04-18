@@ -84,6 +84,27 @@ def send_money():
     "amount": amount}), 200
 
 
+@app.route("/api/transactions/", methods=["POST"])
+def send_or_request_money():
+    """
+    Send money from one user to another, or request money from one user to another
+    """
+    body = json.loads(request.data)
+    sender_id = body.get("sender_id")
+    receiver_id = body.get("receiver_id")
+    amount = body.get("amount")
+    message = body.get("message")
+    accepted = body.get("accepted")
+    
+    sender = DB.get_user_by_id(sender_id)
+    receiver = DB.get_user_by_id(receiver_id)
+    if sender is None or receiver is None:
+        return json.dumps({"error": "User not found"}), 400
+    
+    if accepted is None:
+        
+
+
 
 
 if __name__ == "__main__":
