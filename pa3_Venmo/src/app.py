@@ -109,13 +109,36 @@ def accept_or_deny_money(tran_id):
     """
     body = json.loads(request.data)
     accepted = body.get("accepted")
+
+    transaction = DB.get_transaction_by_id(tran_id)
+    if transaction is None:
+        return json.dumps({"error": "Transaction not found"}), 400
     
-    curr_status = DB.get_transactioin_accepted_value(tran_id)
+    sender_id = transaction["sender_id"]
+    receiver_id = transaction["receiver_id"]
+    curr_status = transaction["accepted"]
+    sender_balance = transaction["sender_balance"]
+    receiver_balance = transaction["receiver_balance"]
+    amount = transaction["amount"]
+
+
     if curr_status is not None:
         return json.dumps({"error": "you cannot change transaction's accepted field if the transaction has already been accepted or denied."}), 403
     
+    if accepted is False:
+        DB.update_transaction_accepted_value(tran_id, accepted)
 
-
+    if accepted is True:
+        if sender_balance < amount:
+            return json.dumps({"error": "User balance overdraft"}), 400
+        sender_balance -= amount
+        receiver_balance += amount
+        DB.update_balance_by_id(sender_balance, sender_id)
+        DB.update_balance_by_id(receiver_balance, receiver_id)
+        DB.update_transaction_accepted_value(tran_id, accepted)
+        transaction = DB.get_transaction_by_id(tran_id)
+        return json.dumps(transaction), 200
+    
 
 
 if __name__ == "__main__":

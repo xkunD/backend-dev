@@ -204,6 +204,18 @@ class DatabaseDriver(object):
         for row in cursor:
             return row[6]
         return None
+    
+    def update_transaction_accepted_value(self, id, accepted):
+        """
+        Using SQL, update the accepted status of a transaction by its id
+        """
+        self.conn.execute("""
+                          UPDATE transactions SET accepted = ? WHERE id = ?""", (accepted, id))
+        self.conn.commit()   
+
+
+        
+
 
 # Only <=1 instance of the database driver
 # exists within the app at all times
