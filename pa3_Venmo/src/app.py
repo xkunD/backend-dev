@@ -47,9 +47,6 @@ def get_user(user_id):
     return json.dumps(user), 200
 
 
-
-
-
 @app.route("/api/users/<int:user_id>/", methods=["DELETE"])
 def delete_user(user_id):
     """
@@ -62,7 +59,6 @@ def delete_user(user_id):
     user["transactions"] = transactions
     DB.delete_user_by_id(user_id)
     return json.dumps(user), 200
-
 
 
 
@@ -120,7 +116,6 @@ def accept_or_deny_money(tran_id):
     sender_balance = DB.get_balance_by_id(sender_id)
     receiver_balance = DB.get_balance_by_id(receiver_id)
     amount = transaction["amount"]
-
 
     if curr_status is not None:
         return json.dumps({"error": "you cannot change transaction's accepted field if the transaction has already been accepted or denied."}), 403
