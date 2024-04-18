@@ -102,9 +102,20 @@ def send_or_request_money():
         return json.dumps({"error": "User not found"}), 400
     
     if accepted is None:
-        DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
-        
-
+        transactions = DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
+        return json.dumps(transactions)
+    
+    if accepted is True:
+        sender_balance = DB.get_balance_by_id(sender_id)
+        receiver_balance = DB.get_balance_by_id(receiver_id)
+        if sender_balance < amount:
+            return json.dumps({"error": "User balance overdraft"}), 400
+        sender_balance -= amount
+        receiver_balance += amount
+        DB.update_balance_by_id(sender_balance, sender_id)
+        DB.update_balance_by_id(receiver_balance, receiver_id)
+        transactions = DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
+        return json.dumps(transactions)
 
 
 
