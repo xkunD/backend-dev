@@ -136,9 +136,9 @@ def accept_or_deny_money(tran_id):
         DB.update_balance_by_id(sender_balance, sender_id)
         DB.update_balance_by_id(receiver_balance, receiver_id)
         DB.update_transaction_accepted_value(tran_id, accepted)
-        transaction = DB.get_transaction_by_id(tran_id)
-        return json.dumps(transaction), 200
-    
+        
+    transaction = DB.get_transaction_by_id(tran_id)
+    return json.dumps(transaction), 200
 
 
 if __name__ == "__main__":
