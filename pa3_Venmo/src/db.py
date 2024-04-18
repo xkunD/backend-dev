@@ -51,7 +51,7 @@ class DatabaseDriver(object):
                           reciever_id INTEGER NOT NULL,
                           amount INTEGER NOT NULL,
                           message TEXT NOT NULL,
-                          accepted BOOLEAN NOT NULL,
+                          accepted BOOLEAN,
                           FOREIGN KEY (sender_id) REFERENCES user(id),
                           FOREIGN KEY (reciever_id) REFERENCES user(id));""")
         
@@ -90,6 +90,27 @@ class DatabaseDriver(object):
         for row in cursor:
             return ({"id": row[0], "name": row[1], "username": row[2], "balance": row[3]})
         return None        
+
+    def get_transactions_of_user(self, user_id):
+        """
+        Using SQL, get the transactions of a user by its ID
+        """
+        cursor = self.conn.execute("""
+                                   SELECT * FROM transactions WHERE user_id=?;""",
+                                   (user_id,),
+                                   )
+        transactions = []
+        for row in cursor:
+            transactions.append({
+                "id": row[0],
+                "timestamp": row[1],
+                "sender_id": row[2],
+                "receiver_id": row[3],
+                "amount": row[4],
+                "message": row[5],
+                "accepted": row[6]
+            })
+        return transactions
 
     def delete_user_by_id(self, id):
         """
