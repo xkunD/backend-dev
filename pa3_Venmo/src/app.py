@@ -46,12 +46,7 @@ def get_user(user_id):
     user["transactions"] = transactions
     return json.dumps(user), 200
 
-@app.route("/api/transactions/")
-def get_all_transactions():
-    """
-    Endpoint for getting all transactions
-    """
-    return json.dumps(DB.get_all_transactions()), 200
+
 
 
 
@@ -105,6 +100,21 @@ def send_or_request_money():
         transaction_id = DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
         transaction = DB.get_transaction_by_id(transaction_id)
         return json.dumps(transaction), 200
+
+
+@app.route("/api/transactions/<int:tran_id>/", method=["POST"])
+def accept_or_deny_money(tran_id):
+    """
+    Endpoint for user to accept or deny the money transaction
+    """
+    body = json.loads(request.data)
+    accepted = body.get("accepted")
+    
+    curr_status = DB.get_transactioin_accepted_value(tran_id)
+    if curr_status is not None:
+        return json.dumps({"error": "you cannot change transaction's accepted field if the transaction has already been accepted or denied."}), 403
+    
+
 
 
 

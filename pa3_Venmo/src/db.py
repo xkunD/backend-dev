@@ -196,7 +196,14 @@ class DatabaseDriver(object):
         self.conn.commit()     
         
 
-
+    def get_transactioin_accepted_value(self, id):
+        """
+        Using SQL, get the accepted status of a transaction by its id
+        """
+        cursor = self.conn.execute("SELECT * FROM transactions WHERE id = ?;", (id,))
+        for row in cursor:
+            return row[6]
+        return None
 
 # Only <=1 instance of the database driver
 # exists within the app at all times
