@@ -36,7 +36,23 @@ class DatabaseDriver(object):
                           name TEXT NOT NULL,
                           username TEXT NOT NULL,
                           balance INTEGER NOT NULL);""")
-
+        
+    def create_transaction_table(self):
+        """
+        Using SQL, create a trasaction table
+        """
+        self.conn.execute("""
+        CREATE TABLE IF NOT EXISTS transactions(
+                          id INTEGER PRIMARY KEY AUTOINCREMENT,
+                          time TEXT NOT NULL,
+                          sender_id INTEGER NOT NULL,
+                          reciever_id INTEGER NOT NULL,
+                          amount INTEGER NOT NULL,
+                          message TEXT NOT NULL,
+                          accepted BOOLEAN NOT NULL,
+                          FOREIGN KEY (sender_id) REFERENCES user(id),
+                          FOREIGN KEY (reciever_id) REFERENCES user(id));""")
+        
     def delete_user_table(self):
         """
         Using SQL, delete a user table
