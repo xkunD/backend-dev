@@ -102,6 +102,7 @@ def send_or_request_money():
         return json.dumps({"error": "User not found"}), 400
     
     if accepted is None:
+        DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
         
 
 
