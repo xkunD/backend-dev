@@ -83,15 +83,45 @@ class DatabaseDriver(object):
         return cursor.lastrowid
     
 
-    def insert_transactions(self, sender_id, receiver, amount, message, accepted):
+    def insert_transactions(self, sender_id, receiver_id, amount, message, accepted):
         """
         Using SQL, inserts a trasaction 
         """
         cursor = self.conn.execute("""
-                                   INSERT INTO transactions(sender_id, receiver, amount, message, accepted) VALUES (?,?,?,?,?);
-                                """, (sender_id, receiver, amount, message, accepted))
+                                   INSERT INTO transactions(sender_id, receiver_id, amount, message, accepted) VALUES (?,?,?,?,?);
+                                """, (sender_id, receiver_id, amount, message, accepted))
         self.conn.commit()
+        transactions = []
+        for row in cursor:
+            transactions.append({
+                "id": row[0],
+                "timestamp": row[1],
+                "sender_id": row[2],
+                "receiver_id": row[3],
+                "amount": row[4],
+                "message": row[5],
+                "accepted": row[6]
+            })  
         return cursor.lastrowid
+    
+
+    def get_transaction_by_id(self, tran_id):
+        """
+        Using SQL, get a transaction by its id
+        """
+        cursor = self.conn.execute("SELECT * FROM transactions WHERE id = ?;", (tran_id,))
+        for row in cursor:
+            return({
+                "id": row[0],
+                "timestamp": row[1],
+                "sender_id": row[2],
+                "receiver_id": row[3],
+                "amount": row[4],
+                "message": row[5],
+                "accepted": row[6]
+            }) 
+        return None 
+          
         
     
     def get_user_by_id(self, user_id):

@@ -46,6 +46,24 @@ def get_user(user_id):
     user["transactions"] = transactions
     return json.dumps(user), 200
 
+@app.route("/api/transactions/")
+def get_all_transactions():
+    """
+    Endpoint for getting all transactions
+    """
+    return json.dumps(DB.get_all_transactions()), 200
+
+@app.route("/api/transactions/", methods = ["POST"])
+def insert_transaction():
+    body = json.loads(request.data)
+    sender_id = body.get("sender_id")
+    receiver_id = body.get("receiver_id")
+    amount = body.get("amount")
+    message = body.get("message")
+    accepted = body.get("accepted")
+    transaction = DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
+    return json.dumps(transaction), 200
+
 @app.route("/api/user/<int:user_id>/", methods=["DELETE"])
 def delete_user(user_id):
     """
@@ -59,30 +77,7 @@ def delete_user(user_id):
     DB.delete_user_by_id(user_id)
     return json.dumps(user), 200
 
-@app.route("/api/send/", methods=["POST"])
-def send_money():
-    """
-    Send money from one user to another
-    """
-    body = json.loads(request.data)
-    sender_id = body.get("sender_id")
-    receiver_id = body.get("receiver_id")
-    amount = body.get("amount")
-    if sender_id is None or receiver_id is None or amount is None:
-        return json.dumps({"error": "Invalid Input"}), 400
-    sender_balance = DB.get_balance_by_id(sender_id)
-    receiver_balance = DB.get_balance_by_id(receiver_id)
-    if sender_balance is None or receiver_balance is None:
-        return json.dumps({"error": "User not found"}), 400
-    if sender_balance < amount:
-        return json.dumps({"error": "User balance overdraft"}), 400
-    sender_balance -= amount
-    receiver_balance += amount
-    DB.update_balance_by_id(sender_balance, sender_id)
-    DB.update_balance_by_id(receiver_balance, receiver_id)
-    return json.dumps({"sender_id": sender_id,
-    "receiver_id": receiver_id,
-    "amount": amount}), 200
+
 
 
 @app.route("/api/transactions/", methods=["POST"])
@@ -103,8 +98,9 @@ def send_or_request_money():
         return json.dumps({"error": "User not found"}), 400
     
     if accepted is None:
-        transactions = DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
-        return json.dumps(transactions)
+        transaction_id = DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
+        transaction = DB.get_transaction_by_id(transaction_id)
+        return json.dumps(transaction),200
     
     if accepted is True:
         sender_balance = DB.get_balance_by_id(sender_id)
@@ -115,8 +111,9 @@ def send_or_request_money():
         receiver_balance += amount
         DB.update_balance_by_id(sender_balance, sender_id)
         DB.update_balance_by_id(receiver_balance, receiver_id)
-        transactions = DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
-        return json.dumps(transactions)
+        transaction_id = DB.insert_transactions(sender_id, receiver_id, amount, message, accepted)
+        transaction = DB.get_transaction_by_id(transaction_id)
+        return json.dumps(transaction), 200
 
 
 
