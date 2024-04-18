@@ -39,9 +39,9 @@ def get_user(user_id):
     Endpoint for getting a user by its ID
     """
     user = DB.get_user_by_id(user_id)
-    transactions = DB.get_transactions_of_user(user_id)
     if user is None:
         return json.dumps({"error": "User not found"}), 404
+    transactions = DB.get_transactions_of_user(user_id)
     user["transactions"] = transactions
     return json.dumps(user), 200
 
@@ -53,6 +53,8 @@ def delete_user(user_id):
     user = DB.get_user_by_id(user_id)
     if user is None:
         return json.dumps({"error": "User not found"}), 404
+    transactions = DB.get_transactions_of_user(user_id)
+    user["transactions"] = transactions
     DB.delete_user_by_id(user_id)
     return json.dumps(user), 200
 
