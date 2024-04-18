@@ -156,7 +156,7 @@ class DatabaseDriver(object):
         Using SQL, gets all subtasks given task_id
         """
         cursor = self.conn.execute("""
-                                   SELECT * FROM subtasks WHERE id=?;""",
+                                   SELECT * FROM subtasks WHERE task_id=?;""",
                                    (task_id,),
                                    )
         subtasks = []
@@ -169,7 +169,22 @@ class DatabaseDriver(object):
             })
         return subtasks
         
+    def get_all_tasks(self):
+        """
+        Using sql, gets all tasks in the task table
+        """
+        cursor = self.conn.execute("""
+                                    SELECT * FROM tasks;
+                                   """)
+        tasks = []
 
+        for row in cursor:
+            tasks.append({
+                "id": row[0],
+                "description": row[1],
+                "done": bool(row[2]),
+                "subtasks": self.get_subtasks_of_task(row[0])
+            })
 
 
 #-- SUBTASKS --------------------------------------------------------

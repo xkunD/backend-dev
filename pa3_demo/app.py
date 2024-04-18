@@ -91,7 +91,7 @@ def create_subtask(task_id):
     return success_response(subtask, 201)
 
 
-@app.route("/tasks/<int:task_id>/subtasks")
+@app.route("/tasks/<int:task_id>/subtasks/")
 def get_subtasks_of_task(task_id):
     """
     Endpoint for getting all subtasks for task with id task_id
