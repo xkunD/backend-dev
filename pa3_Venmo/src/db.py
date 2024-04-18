@@ -122,7 +122,6 @@ class DatabaseDriver(object):
             }) 
         return None
           
-        
     
     def get_user_by_id(self, user_id):
         """
@@ -197,8 +196,6 @@ class DatabaseDriver(object):
                           UPDATE transactions SET accepted = ? WHERE id = ?""", (accepted, id))
         self.conn.commit()   
 
-
-        
 
 
 # Only <=1 instance of the database driver
