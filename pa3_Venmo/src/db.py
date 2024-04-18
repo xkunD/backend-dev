@@ -1,5 +1,6 @@
 import os
 import sqlite3
+import datetime
 
 # From: https://goo.gl/YzypOI
 def singleton(cls):
@@ -25,6 +26,7 @@ class DatabaseDriver(object):
         """
         self.conn = sqlite3.connect("user.db", check_same_thread=False)
         self.create_user_table()
+        self.create_transaction_table()
 
     def create_user_table(self):
         '''
@@ -44,7 +46,7 @@ class DatabaseDriver(object):
         self.conn.execute("""
         CREATE TABLE IF NOT EXISTS transactions(
                           id INTEGER PRIMARY KEY AUTOINCREMENT,
-                          time TEXT NOT NULL,
+                          timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
                           sender_id INTEGER NOT NULL,
                           reciever_id INTEGER NOT NULL,
                           amount INTEGER NOT NULL,
