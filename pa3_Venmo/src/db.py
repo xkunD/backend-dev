@@ -101,15 +101,32 @@ class DatabaseDriver(object):
         cursor = self.conn.execute("SELECT * FROM user WHERE id = ?;", (user_id,))
         for row in cursor:
             return ({"id": row[0], "name": row[1], "username": row[2], "balance": row[3]})
-        return None        
+        return None      
+
+    def get_all_transactions(self):
+        cursor = self.conn.execute("""
+                                    SELECT * FROM transactions;
+                                   """)
+        transactions = []
+        for row in cursor:
+            transactions.append({
+                "id": row[0],
+                "timestamp": row[1],
+                "sender_id": row[2],
+                "receiver_id": row[3],
+                "amount": row[4],
+                "message": row[5],
+                "accepted": row[6]
+            })  
+        return transactions
 
     def get_transactions_of_user(self, user_id):
         """
         Using SQL, get the transactions of a user by its ID
         """
         cursor = self.conn.execute("""
-                                   SELECT * FROM transactions WHERE user_id=?;""",
-                                   (user_id,),
+                                   SELECT * FROM transactions WHERE sender_id=? OR receiver_id=?;""",
+                                   (user_id, user_id,),
                                    )
         transactions = []
         for row in cursor:

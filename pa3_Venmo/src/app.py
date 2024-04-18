@@ -31,6 +31,7 @@ def create_user():
     user = DB.get_user_by_id(user_id)
     if user is None:
         return json.dumps({"error": "User not found"}), 404
+    user["transactions"] = DB.get_transactions_of_user(user_id)
     return json.dumps(user), 201
 
 @app.route("/api/user/<int:user_id>/")
