@@ -8,7 +8,7 @@ class Task(db.Model):
     Task Model
     """
     
-    _tablename_ = "tasks"
+    __tablename__ = "tasks"
     id = db.Column (db.Integer, primary_key=True, autoincrement=True)
     description = db.Column(db.String, nullable=False)
     done = db.Column(db.Boolean, nullable=False)
@@ -31,13 +31,13 @@ class Task(db.Model):
 class Subtask(db.Model):
     """Subtask Model"""
 
-    _tablemane_ = "subtasks"
-    id = db.Column (db.Integer, primary_key=True, autoincrement=True)
-    description = db.Column (db.String, nullable=False)
-    done = db.Column (db.Boolean, nullable=False)
-    task_id = db.Column (db.Integer, db.ForeignKey("tasks.id"),nullable=False)
+    __tablemane__ = "subtasks"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    description = db.Column(db.String, nullable=False)
+    done = db.Column(db.Boolean, nullable=False)
+    task_id = db.Column(db.Integer, db.ForeignKey("tasks.id"),nullable=False)
 
-    def init__(self, **kwargs) :
+    def __init__(self, **kwargs) :
 
         """ 
         Initialize the subtask obiect

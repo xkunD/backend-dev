@@ -37,8 +37,13 @@ def get_tasks():
     """
     Endpoint for getting all tasks
     """
-    tasks = []
-    Task.query.all()
+    # tasks = []
+    # for task in Task.query.all():
+    #     tasks.append(task.serialize())
+    # return success_response({"tasks": tasks})
+
+    return success_response({"tasks": [t.serialize() for t in Task.query.all()]})
+        
 
 
 @app.route("/tasks/", methods=["POST"])
