@@ -2,7 +2,7 @@ import json
 
 from db import db
 from flask import Flask, request
-from db import Task
+from db import Task, Subtask
 
 # define db filename
 db_filename = "todo.db"
@@ -111,7 +111,18 @@ def create_subtask(task_id):
     Endpoint for creating a subtask
     for a task by id
     """
-    pass
+    task = Task.query.filter_by(id = task_id).first()
+    if task is None:
+        return failure_response("Taks not found")
+    body = json.loads(request.data)
+    new_subtask = Subtask(
+        description = body.get("description"),
+        done = body.get("done"),
+        task_id = task_id
+    )
+    db.session.add(new_subtask)
+    db.session.commit()
+    return success_response(new_subtask.serialize(), 201)
 
 
 # -- CATEGORY ROUTES --------------------------------------------------
