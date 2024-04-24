@@ -2,7 +2,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
-# Separate association tables for instructors and students
 instructor_course_table = db.Table('instructor_course',
     db.Column('course_id', db.Integer, db.ForeignKey('courses.id'), primary_key=True),
     db.Column('user_id', db.Integer, db.ForeignKey('users.id'), primary_key=True)
@@ -14,6 +13,9 @@ student_course_table = db.Table('student_course',
 )
 
 class Course(db.Model):
+    """
+    Course Model
+    """
     __tablename__ = 'courses'
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String, nullable=False)
@@ -23,6 +25,11 @@ class Course(db.Model):
                                   back_populates='instructed_courses')
     students = db.relationship('User', secondary=student_course_table,
                                back_populates='studied_courses')
+
+    def __init__(self, **kwargs):
+        """Initialize Course object/entry"""
+        self.code = kwargs.get("code", "")
+        self.name = kwargs.get ("name", "")
 
     def serialize(self):
         return {

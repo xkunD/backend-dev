@@ -10,12 +10,10 @@ association_table = db.Table(
 )
 
 
-# implement database model classes
 class Task(db.Model):
     """
     Task Model
     """
-    
     __tablename__ = "tasks"
     id = db.Column (db.Integer, primary_key=True, autoincrement=True)
     description = db.Column(db.String, nullable=False)

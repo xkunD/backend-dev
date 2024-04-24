@@ -11,7 +11,6 @@ db.init_app(app)
 with app.app_context():
     db.create_all()
 
-# Generalized response functions
 def success_response(data, code=200):
     return jsonify(data), code
 
@@ -19,15 +18,20 @@ def failure_response(message, code=400):
     return jsonify({"error": message}), code
 
 # ------------------- Course Routes -------------------
+@app.route("/")
+def hello_world():
+    return "Hello world!"
 
-@app.route("/courses/", methods=["GET"])
+@app.route("/api/courses/")
 def get_all_courses():
-    courses = Course.query.all()
-    return success_response({"courses": [course.serialize() for course in courses]})
+    """
+    Endpoint for getting all courses
+    """
+    return success_response({"courses": [c.serialize() for c in Course.query.all()]})
 
-@app.route("/courses/", methods=["POST"])
+@app.route("/api/courses/", methods=["POST"])
 def create_course():
-    data = request.get_json()
+    data = json.loads(request.data)
     if not data.get("code") or not data.get("name"):
         return failure_response("Missing course code or name", 400)
     course = Course(code=data["code"], name=data["name"])
@@ -35,14 +39,14 @@ def create_course():
     db.session.commit()
     return success_response(course.serialize(), 201)
 
-@app.route("/courses/<int:course_id>/", methods=["GET"])
+@app.route("/api/courses/<int:course_id>/")
 def get_course(course_id):
     course = Course.query.get(course_id)
     if course is None:
         return failure_response("Course not found", 404)
     return success_response(course.serialize())
 
-@app.route("/courses/<int:course_id>/", methods=["DELETE"])
+@app.route("/api/courses/<int:course_id>/", methods=["DELETE"])
 def delete_course(course_id):
     course = Course.query.filter_by(id = course_id).first()
     if course is None:
@@ -54,9 +58,9 @@ def delete_course(course_id):
 
 # ------------------- User Routes -------------------
 
-@app.route("/users/", methods=["POST"])
+@app.route("/api/users/", methods=["POST"])
 def create_user():
-    data = request.get_json()
+    data = json.loads(request.data)
     if not data.get("name") or not data.get("netid"):
         return failure_response("Missing user name or netid", 400)
     user = User(name=data["name"], netid=data["netid"])
@@ -64,7 +68,7 @@ def create_user():
     db.session.commit()
     return success_response(user.serialize(), 201)
 
-@app.route("/users/<int:user_id>/", methods=["GET"])
+@app.route("/api/users/<int:user_id>/")
 def get_user(user_id):
     user = User.query.get(user_id)
     if user is None:
@@ -72,13 +76,13 @@ def get_user(user_id):
     return success_response(user.serialize())
 
 # ------------------- Assignment and Enrollment Routes -------------------
-@app.route("/courses/<int:course_id>/add/", methods=["POST"])
+@app.route("/api/courses/<int:course_id>/add/", methods=["POST"])
 def add_user_to_course(course_id):
     course = Course.query.get(course_id)
     if course is None:
         return failure_response("Course not found", 404)
 
-    data = request.get_json()
+    data = json.loads(request.data)
     user_id = data.get("user_id")
     type_ = data.get("type")
     
@@ -105,11 +109,17 @@ def add_user_to_course(course_id):
     db.session.commit()
     return success_response(course.serialize())
 
-@app.route("/courses/<int:course_id>/assignment/", methods=["POST"])
+
+@app.route("/api/courses/<int:course_id>/assignment/", methods=["POST"])
 def create_assignment(course_id):
-    data = request.get_json()
-    if not data.get("title") or not data.get("due_date"):
+    course = Course.query.get(course_id)
+    if not course:
+        return failure_response("Course not found", 404)  
+
+    data = json.loads(request.data)
+    if not data or 'title' not in data or 'due_date' not in data:
         return failure_response("Missing title or due date for assignment", 400)
+
     assignment = Assignment(title=data["title"], due_date=data["due_date"], course_id=course_id)
     db.session.add(assignment)
     db.session.commit()
