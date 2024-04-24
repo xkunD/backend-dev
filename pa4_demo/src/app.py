@@ -1,7 +1,7 @@
 import json
 
 from db import db
-from flask import Flask
+from flask import Flask, request
 from db import Task
 
 # define db filename
@@ -51,7 +51,8 @@ def create_task():
     """
     Endpoint for creating a new task
     """
-    pass
+    body = json.loads(request.data)
+
 
 
 @app.route("/tasks/<int:task_id>/")
