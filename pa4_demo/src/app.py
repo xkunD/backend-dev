@@ -99,6 +99,7 @@ def delete_task(task_id):
         return failure_response("Task not found!")
     db.session.delete(task)
     db.session.commit()
+    return success_response(task.serialize())
 
 
 # -- SUBTASK ROUTES ---------------------------------------------------
