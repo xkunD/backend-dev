@@ -36,8 +36,10 @@ class Task(db.Model):
             "id": self.id,
             "description": self.description,
             "done": self.done,
-            "subtasks": [s.serialize() for s in self.subtasks]
+            "subtasks": [s.serialize() for s in self.subtasks],
+            "categories": [c.serialize() for c in self.categories]
         }
+    
 
 class Subtask(db.Model):
     """Subtask Model"""
@@ -77,3 +79,20 @@ class Category(db.Model):
     description = db.Column(db.String, nullable =False)
     color = db.Column(db.String, nullable=False)
     tasks = db.relationship("Task",secondary=association_table, back_populates="categories")
+
+    def __init__(self, **kwargs):
+        """
+        Initialize a category object
+        """
+        self.description = kwargs.get("description")
+        self.color = kwargs.get("color")
+
+    def serialize(self):
+        """
+        Serialize a category object
+        """
+        return{
+            "id": self.id,
+            "description": self.description,
+            "color": self.color
+        }
