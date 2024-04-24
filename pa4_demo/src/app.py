@@ -2,7 +2,7 @@ import json
 
 from db import db
 from flask import Flask, request
-from db import Task, Subtask
+from db import Task, Subtask,Category
 
 # define db filename
 db_filename = "todo.db"
@@ -134,7 +134,18 @@ def assign_category(task_id):
     Endpoint for assigning a category
     to a task by id
     """
-    pass
+    task = Task.query.filter_by(id=task_id).first()
+    if task is None:
+        return failure_response("Task not found!")
+    body = json.loads(request.data)
+    description = body.get("description")
+    color = body.get("color")
+    category = Category.query.filter_by(color = color).first()
+    if category is None:
+        category = Category(description = description, color = color)
+    task.categories.field(category)
+    db.session.commit()
+    return success_response(task.serialize())
 
 
 if __name__ == "__main__":
