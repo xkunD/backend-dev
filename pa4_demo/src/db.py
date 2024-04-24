@@ -37,7 +37,7 @@ class Task(db.Model):
             "description": self.description,
             "done": self.done,
             "subtasks": [s.serialize() for s in self.subtasks],
-            "categories": [c.serialize() for c in self.categories]
+            "categories": [c.simple_serialize() for c in self.categories]
         }
     
 
@@ -94,5 +94,14 @@ class Category(db.Model):
         return{
             "id": self.id,
             "description": self.description,
-            "color": self.color
+            "color": self.color,
+            "tasks": [t.serialize() for t in self.tasks]
         }
+    
+    def simple_serialize(self):
+        return{
+            "id": self.id,
+            "description": self.description,
+            "color": self.color,
+        }
+    
