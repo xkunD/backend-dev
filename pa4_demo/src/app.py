@@ -2,6 +2,7 @@ import json
 
 from db import db
 from flask import Flask
+from db import Task
 
 # define db filename
 db_filename = "todo.db"
@@ -36,7 +37,8 @@ def get_tasks():
     """
     Endpoint for getting all tasks
     """
-    pass
+    tasks = []
+    Task.query.all()
 
 
 @app.route("/tasks/", methods=["POST"])
