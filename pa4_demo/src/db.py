@@ -26,7 +26,8 @@ class Task(db.Model):
         return {
             "id": self.id,
             "description": self.description,
-            "done": self.done
+            "done": self.done,
+            "subtasks": [s.serialize() for s in self.subtasks]
         }
 
 class Subtask(db.Model):
