@@ -72,7 +72,6 @@ def get_user(user_id):
     return success_response(user.serialize())
 
 # ------------------- Assignment and Enrollment Routes -------------------
-
 @app.route("/courses/<int:course_id>/add/", methods=["POST"])
 def add_user_to_course(course_id):
     course = Course.query.get(course_id)
@@ -90,23 +89,21 @@ def add_user_to_course(course_id):
     if user is None:
         return failure_response("User not found", 404)
 
-    # Clear existing assignments to avoid duplication in roles
-    if user in course.students:
-        course.students.remove(user)
-    if user in course.instructors:
-        course.instructors.remove(user)
-
-    # Assign the user to the new role
     if type_ == "student":
-        course.students.append(user)
+        if user in course.instructors:
+            course.instructors.remove(user)
+        if user not in course.students:
+            course.students.append(user)
     elif type_ == "instructor":
-        course.instructors.append(user)
+        if user in course.students:
+            course.students.remove(user)
+        if user not in course.instructors:
+            course.instructors.append(user)
     else:
         return failure_response("Invalid type specified. Choose 'student' or 'instructor'.", 400)
 
     db.session.commit()
     return success_response(course.serialize())
-
 
 @app.route("/courses/<int:course_id>/assignment/", methods=["POST"])
 def create_assignment(course_id):
@@ -116,8 +113,7 @@ def create_assignment(course_id):
     assignment = Assignment(title=data["title"], due_date=data["due_date"], course_id=course_id)
     db.session.add(assignment)
     db.session.commit()
-    return success_response(assignment.serialize(), 201)
-
+    return success_response(assignment.serialize_for_creation(), 201)
 
 
 if __name__ == "__main__":
