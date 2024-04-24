@@ -12,9 +12,15 @@ with app.app_context():
     db.create_all()
 
 def success_response(data, code=200):
+    """
+    success response function
+    """
     return jsonify(data), code
 
 def failure_response(message, code=400):
+    """
+    failure response function
+    """
     return jsonify({"error": message}), code
 
 # ------------------- Course Routes -------------------
@@ -31,6 +37,9 @@ def get_all_courses():
 
 @app.route("/api/courses/", methods=["POST"])
 def create_course():
+    """
+    Endpoint for creating a course
+    """
     data = json.loads(request.data)
     if not data.get("code") or not data.get("name"):
         return failure_response("Missing course code or name", 400)
@@ -41,6 +50,9 @@ def create_course():
 
 @app.route("/api/courses/<int:course_id>/")
 def get_course(course_id):
+    """
+    Endpoint for get a course by ID
+    """
     course = Course.query.get(course_id)
     if course is None:
         return failure_response("Course not found", 404)
@@ -48,6 +60,9 @@ def get_course(course_id):
 
 @app.route("/api/courses/<int:course_id>/", methods=["DELETE"])
 def delete_course(course_id):
+    """
+    Endpoint for deleting a course
+    """
     course = Course.query.filter_by(id = course_id).first()
     if course is None:
         return failure_response("Course not found!")
@@ -60,6 +75,9 @@ def delete_course(course_id):
 
 @app.route("/api/users/", methods=["POST"])
 def create_user():
+    """
+    Endpoint for creating a user
+    """
     data = json.loads(request.data)
     if not data.get("name") or not data.get("netid"):
         return failure_response("Missing user name or netid", 400)
@@ -70,6 +88,9 @@ def create_user():
 
 @app.route("/api/users/<int:user_id>/")
 def get_user(user_id):
+    """
+    Endpoint for getting a user by ID
+    """
     user = User.query.get(user_id)
     if user is None:
         return failure_response("User not found", 404)
@@ -78,11 +99,17 @@ def get_user(user_id):
 # ------------------- Assignment and Enrollment Routes -------------------
 @app.route("/api/courses/<int:course_id>/add/", methods=["POST"])
 def add_user_to_course(course_id):
+    """
+    Endpoint for adding a user to a course as a student or instructor
+    """
     course = Course.query.get(course_id)
-    if course is None:
+    if not course:
         return failure_response("Course not found", 404)
 
     data = json.loads(request.data)
+    if not data or 'user_id' not in data or 'type' not in data:
+        return failure_response("Missing required fields", 400)
+
     user_id = data.get("user_id")
     type_ = data.get("type")
     
@@ -112,6 +139,9 @@ def add_user_to_course(course_id):
 
 @app.route("/api/courses/<int:course_id>/assignment/", methods=["POST"])
 def create_assignment(course_id):
+    """
+    Endpoint for creating an assignment
+    """
     course = Course.query.get(course_id)
     if not course:
         return failure_response("Course not found", 404)  

@@ -32,6 +32,9 @@ class Course(db.Model):
         self.name = kwargs.get ("name", "")
 
     def serialize(self):
+        """
+        Serialize a course object
+        """
         return {
             'id': self.id,
             'code': self.code,
@@ -40,8 +43,20 @@ class Course(db.Model):
             'instructors': [instructor.serialize_no_courses() for instructor in self.instructors],
             'students': [student.serialize_no_courses() for student in self.students]
         }
+    def serialize_no_people(self):
+        """
+        Serialize the Course instance without student and instructor details.
+        """
+        return {
+            'id': self.id,
+            'code': self.code,
+            'name': self.name
+        }
 
 class User(db.Model):
+    """
+    User Model
+    """
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -54,6 +69,9 @@ class User(db.Model):
                                       back_populates='students')
 
     def serialize(self):
+        """
+        Serialize a user object
+        """
         all_courses = set(self.instructed_courses + self.studied_courses)  # Remove duplicates by using a set
         return {
             'id': self.id,
@@ -63,6 +81,9 @@ class User(db.Model):
         }
 
     def serialize_no_courses(self):
+        """
+        Serialize a user object without courses
+        """
         return {
             'id': self.id,
             'name': self.name,
@@ -70,6 +91,9 @@ class User(db.Model):
         }
 
 class Assignment(db.Model):
+    """
+    Assignment Model
+    """
     __tablename__ = 'assignments'
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
@@ -78,6 +102,9 @@ class Assignment(db.Model):
     course = db.relationship('Course', back_populates='assignments')
 
     def serialize(self):
+        """
+        Serialize a assignment object
+        """
         return {
             'id': self.id,
             'title': self.title,
@@ -85,6 +112,9 @@ class Assignment(db.Model):
             'course': self.course.serialize()
         }
     def serialize_for_creation(self):
+        """
+        Serialize a assignment object for creating assignment
+        """
         return {
             'id': self.id,
             'title': self.title,
@@ -97,6 +127,9 @@ class Assignment(db.Model):
         }
 
     def serialize_no_course(self):
+        """
+        Serialize a assignment object without courses
+        """
         return {
             'id': self.id,
             'title': self.title,
