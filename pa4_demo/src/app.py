@@ -143,7 +143,7 @@ def assign_category(task_id):
     category = Category.query.filter_by(color = color).first()
     if category is None:
         category = Category(description = description, color = color)
-    task.categories.field(category)
+    task.categories.append(category)
     db.session.commit()
     return success_response(task.serialize())
 

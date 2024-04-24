@@ -21,7 +21,7 @@ class Task(db.Model):
     description = db.Column(db.String, nullable=False)
     done = db.Column(db.Boolean, nullable=False)
     subtasks = db.relationship("Subtask", cascade="delete")
-    categories = db.relationship("Category", secondary=association_table, back_populates="taskss")
+    categories = db.relationship("Category", secondary=association_table, back_populates="tasks")
 
     def __init__(self, **kwargs):
         """Initialize Task object/entry"""
