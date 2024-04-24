@@ -42,7 +42,7 @@ def get_course(course_id):
         return failure_response("Course not found", 404)
     return success_response(course.serialize())
 
-@app.route("/api/courses/<int:course_id>/", methods=["DELETE"])
+@app.route("/courses/<int:course_id>/", methods=["DELETE"])
 def delete_course(course_id):
     course = Course.query.filter_by(id = course_id).first()
     if course is None:
@@ -76,18 +76,37 @@ def get_user(user_id):
 @app.route("/courses/<int:course_id>/add/", methods=["POST"])
 def add_user_to_course(course_id):
     course = Course.query.get(course_id)
+    if course is None:
+        return failure_response("Course not found", 404)
+
     data = request.get_json()
-    if course is None or not data.get("user_id") or not data.get("type"):
-        return failure_response("Course not found or invalid input", 400)
-    user = User.query.get(data["user_id"])
+    user_id = data.get("user_id")
+    type_ = data.get("type")
+    
+    if not user_id or not type_:
+        return failure_response("Missing user ID or type", 400)
+
+    user = User.query.get(user_id)
     if user is None:
         return failure_response("User not found", 404)
-    if data["type"] == "student":
+
+    # Clear existing assignments to avoid duplication in roles
+    if user in course.students:
+        course.students.remove(user)
+    if user in course.instructors:
+        course.instructors.remove(user)
+
+    # Assign the user to the new role
+    if type_ == "student":
         course.students.append(user)
-    elif data["type"] == "instructor":
+    elif type_ == "instructor":
         course.instructors.append(user)
+    else:
+        return failure_response("Invalid type specified. Choose 'student' or 'instructor'.", 400)
+
     db.session.commit()
     return success_response(course.serialize())
+
 
 @app.route("/courses/<int:course_id>/assignment/", methods=["POST"])
 def create_assignment(course_id):

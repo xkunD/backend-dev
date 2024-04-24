@@ -42,12 +42,12 @@ class User(db.Model):
                                       back_populates='students')
 
     def serialize(self):
+        all_courses = set(self.instructed_courses + self.studied_courses) 
         return {
             'id': self.id,
             'name': self.name,
             'netid': self.netid,
-            'courses': [course.serialize_no_people() for course in
-                        self.instructed_courses.union(self.studied_courses)]
+            'courses': [course.serialize_no_people() for course in all_courses]
         }
 
     def serialize_no_courses(self):
