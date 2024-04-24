@@ -2,6 +2,15 @@ from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
 
+association_table = db.Table(
+    "association",
+    db.Model.metadata,
+    db.Column("task_id", db.Integer, db.Foreign("tasks.id")),
+    db.Column("category_id", db.Integer, db.Foreign("categories.id"))
+
+)
+
+
 # implement database model classes
 class Task(db.Model):
     """
@@ -59,3 +68,12 @@ class Subtask(db.Model):
             "task_id": self.task_id
         }
         
+class Category(db.Model):
+    """
+    Category Model
+    """
+    __tablename__ = "categories"
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    description = db.Column(db.String, nullable =False)
+    color = db.Column(db.String, nullable=False)
+    tasks = db.relationship("Task",secondary=association_table, back_populates="categories")
