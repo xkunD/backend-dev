@@ -5,9 +5,8 @@ db = SQLAlchemy()
 association_table = db.Table(
     "association",
     db.Model.metadata,
-    db.Column("task_id", db.Integer, db.Foreign("tasks.id")),
-    db.Column("category_id", db.Integer, db.Foreign("categories.id"))
-
+    db.Column("task_id", db.Integer, db.ForeignKey("tasks.id")),
+    db.Column("category_id", db.Integer, db.ForeignKey("categories.id"))
 )
 
 
