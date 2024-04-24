@@ -52,6 +52,13 @@ def create_task():
     Endpoint for creating a new task
     """
     body = json.loads(request.data)
+    new_task = Task(
+        description = body.get('description'),
+        done = body.get("done")
+    )
+    db.session.add(new_task)
+    db.session.commit()
+    return success_response(new_task.serialize(), 201)
 
 
 
@@ -60,7 +67,11 @@ def get_task(task_id):
     """
     Endpoint for getting a task by id
     """
-    pass
+    task = Task.query.filter_by(id=task_id).first()
+    if task is None:
+        return failure_response("Task not found!")
+    return success_response(task.serialize())
+
 
 
 @app.route("/tasks/<int:task_id>/", methods=["POST"])
@@ -68,7 +79,14 @@ def update_task(task_id):
     """
     Endpoint for updating a task by id
     """
-    pass
+    body = json.loads(request.data)
+    task = Task.query.filter_by(id=task_id).first()
+    if task is None:
+        return failure_response("Task not found!")
+    task.description = body.get("description")
+    task.done = body.get("done")
+    db.session.commit()
+    return success_response(task.serialize()) 
 
 
 @app.route("/tasks/<int:task_id>/", methods=["DELETE"])
@@ -76,7 +94,11 @@ def delete_task(task_id):
     """
     Endpoint for deleting a task by id
     """
-    pass
+    task = Task.query.filter_by(id=task_id).first()
+    if task is None:
+        return failure_response("Task not found!")
+    db.session.delete(task)
+    db.session.commit()
 
 
 # -- SUBTASK ROUTES ---------------------------------------------------
