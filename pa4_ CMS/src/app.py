@@ -44,13 +44,12 @@ def get_course(course_id):
 
 @app.route("/api/courses/<int:course_id>/", methods=["DELETE"])
 def delete_course(course_id):
-    course = Course.query.get(course_id)
+    course = Course.query.filter_by(id = course_id).first()
     if course is None:
-        return failure_response("Course not found", 404)
-    course_details = course.serialize()  # Capture details before deletion
+        return failure_response("Course not found!")
     db.session.delete(course)
     db.session.commit()
-    return success_response(course_details)
+    return success_response(course.serialize())
 
 
 # ------------------- User Routes -------------------
