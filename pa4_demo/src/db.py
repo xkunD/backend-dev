@@ -9,7 +9,6 @@ association_table = db.Table(
     db.Column("category_id", db.Integer, db.ForeignKey("categories.id"))
 )
 
-
 class Task(db.Model):
     """
     Task Model
