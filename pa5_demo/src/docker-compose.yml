@@ -2,6 +2,6 @@ version: '3'
 
 services:
   demo:
-    image: demo
+    image: xiaokun/pa5demo
     ports:
     - "8000:8000"
