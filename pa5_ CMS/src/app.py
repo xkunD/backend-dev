@@ -1,6 +1,7 @@
 import json
 from flask import Flask, request, jsonify
 from db import db, Course, User, Assignment
+import os
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///school.db"

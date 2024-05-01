@@ -2,8 +2,8 @@ Name:
 NetID:
 
 Challenges Attempted (Tier I/II/III):
-Working Endpoint: <Put a working endpoint from PA 4 here (e.g. GET /api/courses/)>
-Your Docker Hub Repository Link:
+Working Endpoint: <GET /api/courses/>
+Your Docker Hub Repository Link: https://hub.docker.com/repository/docker/xkund/pa5/general
 
 Questions:
 Explain the concept of containerization in your own words.
