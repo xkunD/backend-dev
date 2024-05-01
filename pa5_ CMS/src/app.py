@@ -25,8 +25,11 @@ def failure_response(message, code=400):
 
 # ------------------- Course Routes -------------------
 @app.route("/")
-def hello_world():
-    return "Hello world!"
+def greet_user():
+    """
+    Endpoints for getting a user by reading the name in the .env file
+    """
+    return "hello," + str(os.environ.get("NAME"))
 
 @app.route("/api/courses/")
 def get_all_courses():
