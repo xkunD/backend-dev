@@ -37,7 +37,7 @@ def greet_user():
     """
     Endpoints for getting a user by reading the name in the .env file
     """
-    return "hello," + os.environ["NAME"]
+    return "hello," + str(os.environ.get("NAME"))
 @app.route("/tasks/")
 def get_tasks():
     """
