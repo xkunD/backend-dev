@@ -5,3 +5,4 @@ services:
     image: xiaokun/pa5demo
     ports:
     - "8000:8000"
+    .env_file: .env

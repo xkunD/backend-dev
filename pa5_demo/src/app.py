@@ -3,6 +3,7 @@ import json
 from db import db
 from flask import Flask, request
 from db import Task, Subtask,Category
+import os
 
 # define db filename
 db_filename = "todo.db"
@@ -32,6 +33,11 @@ def failure_response(message, code=404):
 
 
 @app.route("/")
+def greet_user():
+    """
+    Endpoints for getting a user by reading the name in the .env file
+    """
+    return "hello," + os.environ["NAME"]
 @app.route("/tasks/")
 def get_tasks():
     """
