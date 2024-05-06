@@ -30,7 +30,7 @@ def greet_user():
     """
     Endpoints for getting a user by reading the name in the .env file
     """
-    return "hello," + str(os.environ.get("NAME"))
+    return success_response(str(os.environ.get("NETID")) + " was here!")
 
 @app.route("/api/courses/")
 def get_all_courses():

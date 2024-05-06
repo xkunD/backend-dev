@@ -1,48 +1,30 @@
-Name: Xiaokun Du
+Name: Xiaokun Du	
 NetID: xd239
 
-Challenges Attempted (Tier I/II/III): none
 Working Endpoint: <GET /api/courses/>
-Your Docker Hub Repository Link: https://hub.docker.com/repository/docker/xkund/pa5/general
+Your Server Address: http://34.86.120.32
 
 Questions:
-Explain the concept of containerization in your own words.
+Explain the concept of deployment in your own words.
 
-Containerization involves packaging software code, along with all its dependencies, into standardized units called containers. These containers ensure that the software runs consistently across different environments by virtualizing the operating system instead of the hardware. This makes containers lightweight and portable, allowing multiple containers to share the same OS kernel.
+Deployment is the process of putting a software application onto a server or other environment where users can actually use it. It moves the software from being a development project to a live application.
 
+What are environment variables?
 
+Environment variables are settings that tell your computer how to behave for different applications. They store information like where to find files or which settings to use, without changing the program's code.
 
-What is the difference between a Docker image and a Docker container?
+What is the filename of the file where environment variables are traditionally stored?
 
-A Docker image is a static blueprint of a software application, containing all the necessary components such as code, runtime, libraries, and environment variables to run it. A Docker container, on the other hand, is a runtime instance of an image. When you execute an image, it becomes a container. 
+.env
 
-What is the command to list all Docker images?
+What is the network protocol we use to access servers?
 
-docker image ls
+The most common protocol for accessing servers is TCP (Transmission Control Protocol). It ensures data is sent reliably and in order over the internet.
 
-What is the command to list all Docker containers?
+Explain the concept of clustering in your own words.
 
-docker container ls
+Clustering means linking several computers or servers together so they act like one big machine. This helps handle more tasks at once and keeps the system running even if one server fails.
 
-What is a Docker tag and what is it used for?
+Explain the concept of load balancing in your own words.
 
-A Docker tag is a label applied to Docker images that specify different versions or configurations of the same base image. Tags are used to easily identify and pull specific versions of images from a repository. We might tag different versions of our application to manage development, testing, and production versions separately.
-
-What is Docker Hub and what is it used for?
-
-Docker Hub is a cloud-based repository service where Docker users and organizations can share Docker images. It works similarly to GitHub but for Docker images. We can push our local images to Docker Hub to make them accessible to others, or pull images published by others to our local environment. 
-
-What is Docker compose used for?
-
-Docker Compose is a tool used to define and run multi-container Docker applications. With Compose, we can use a YAML file to configure our application’s services and with a single command, we can create and start all the services defined in our configuration. It simplifies the management of applications that consist of several interconnected containers.
-
-
-What is the difference between the RUN and CMD commands?
-
-The RUN command is used in a Dockerfile to execute commands that form the image. RUN is used for installing software, modifying settings,  performing build tasks during the image creation. CMD is used to specify a command that should be run when the container starts. If we don’t specify a CMD, Docker will use the default command from the image. If we start the container with an alternative command, it overrides the CMD specified in the Dockerfile.
-
-
-
-
-
-
+Load balancing is about spreading tasks across several computers or servers so that no single one gets overloaded. This helps make applications run faster and more reliably by managing traffic and workload efficiently.
